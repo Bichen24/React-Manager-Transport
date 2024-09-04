@@ -1,6 +1,6 @@
 /* eslint-disable react-refresh/only-export-components */
 import { createBrowserRouter, Navigate, RouteObject } from "react-router-dom";
-import { lazy } from "react";
+import React, { lazy } from "react";
 import Error404 from "../views/ErrorPage/Error404";
 import Error403 from "../views/ErrorPage/Error403";
 import Login from "../views/Login";

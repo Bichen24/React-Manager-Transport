@@ -1,9 +1,9 @@
 import axios, { AxiosError } from "axios";
 
-import { message } from "antd";
+import { message } from "../utils/AntdGlobal";
 
-import { hideLoading, showLoading } from "./Loading";
-import storage from "./storage";
+import { hideLoading, showLoading } from "../utils/Loading";
+import storage from "../utils/storage";
 
 const instance = axios.create({
     baseURL: import.meta.env.VITE_BASE_URL,
@@ -11,7 +11,7 @@ const instance = axios.create({
     timeoutErrorMessage: "请求超时，请稍后在尝试",
     withCredentials: true,
     headers: {
-        icode: "B26F304409F82D8F",
+        icode: "DD38285E688BDC12",
     },
 });
 
@@ -23,12 +23,16 @@ instance.interceptors.request.use(
         } else {
             config.baseURL = import.meta.env.VITE_BASE_URL;
         }
-        showLoading();
+        if (config.showLoading) showLoading();
         const token = storage.get("token");
         if (token) config.headers.Authorization = `Bearer ${token}`;
+
         return config;
     },
-    (err: AxiosError) => Promise.reject(err)
+    (err: AxiosError) => {
+        message.error(err.message);
+        return Promise.reject(err);
+    }
 );
 //响应拦截器
 instance.interceptors.response.use(
@@ -40,8 +44,12 @@ instance.interceptors.response.use(
             storage.remove("token");
             location.href = "/login";
         } else if (code != 0) {
-            message.error(msg);
-            return Promise.reject(res.data);
+            if (res.config.showError) {
+                message.error(msg);
+                return Promise.reject(res.data);
+            } else {
+                return Promise.resolve(res.data);
+            }
         }
         return data;
     },
@@ -51,12 +59,23 @@ instance.interceptors.response.use(
         return Promise.reject(err);
     }
 );
-
+interface IConfig {
+    showLoading?: boolean;
+    showError?: boolean;
+}
 export default {
-    get<T>(url: string, params?: object): Promise<T> {
-        return instance.get(url, { params });
+    get<T>(
+        url: string,
+        params?: object,
+        options: IConfig = { showLoading: true, showError: true }
+    ): Promise<T> {
+        return instance.get(url, { params, ...options });
     },
-    post<T>(url: string, data?: object): Promise<T> {
-        return instance.post(url, data);
+    post<T>(
+        url: string,
+        data?: object,
+        options: IConfig = { showLoading: true, showError: true }
+    ): Promise<T> {
+        return instance.post(url, data, options);
     },
 };
