@@ -1,12 +1,14 @@
 import { memo } from "react";
 import type { FC, ReactNode } from "react";
+
+import styles from "./index.module.less";
 type Props = {
     children?: ReactNode;
 };
 const Welcome: FC<Props> = () => {
     return (
-        <div>
-            <h2>Welcome</h2>
+        <div className={styles.welcome}>
+            <h2>React18</h2>
         </div>
     );
 };
