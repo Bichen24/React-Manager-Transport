@@ -1,11 +1,9 @@
-import { RouterProvider } from "react-router-dom";
+import { Outlet } from "react-router-dom";
 import React from "react";
 
 import { Layout, Menu } from "antd";
 import { MailOutlined } from "@ant-design/icons";
 import type { MenuProps } from "antd";
-
-import router from "../router";
 
 import Header from "./Header";
 import styles from "./index.module.less";
@@ -60,7 +58,7 @@ const AppLayout: React.FC = () => {
                 <Header />
                 <Content className={styles.content}>
                     <div className={styles.wrapper}>
-                        <RouterProvider router={router} />
+                        <Outlet />
                     </div>
                     <Footer style={{ textAlign: "center" }}>
                         Ant Design ©{new Date().getFullYear()} Created by Ant

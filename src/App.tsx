@@ -3,7 +3,8 @@ import type { FC, ReactNode } from "react";
 
 import { ConfigProvider, App as AntdApp } from "antd";
 import AntdGlobal from "./utils/AntdGlobal";
-import Layout from "./Layout";
+import { RouterProvider } from "react-router-dom";
+import router from "./router";
 
 type Props = {
     children?: ReactNode;
@@ -20,7 +21,7 @@ const App: FC<Props> = () => {
             >
                 <AntdApp>
                     <AntdGlobal></AntdGlobal>
-                    <Layout/>
+                    <RouterProvider router={router}></RouterProvider>
                 </AntdApp>
             </ConfigProvider>
         </Suspense>

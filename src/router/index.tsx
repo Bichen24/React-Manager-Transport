@@ -1,9 +1,10 @@
 /* eslint-disable react-refresh/only-export-components */
 import { createBrowserRouter, Navigate, RouteObject } from "react-router-dom";
-import React, { lazy } from "react";
+import { lazy } from "react";
 import Error404 from "../views/ErrorPage/Error404";
 import Error403 from "../views/ErrorPage/Error403";
 import Login from "../views/Login";
+import AppLayout from "../Layout";
 
 const Welcome = lazy(() => import("../views/Welcome"));
 const router: RouteObject[] = [
@@ -12,8 +13,14 @@ const router: RouteObject[] = [
         element: <Navigate to={"/welcome"} />,
     },
     {
-        path: "/welcome",
-        element: <Welcome />,
+        element: <AppLayout />,
+        id: "layout",
+        children: [
+            {
+                path: "/welcome",
+                element: <Welcome />,
+            },
+        ],
     },
     {
         path: "/login",
